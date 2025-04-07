@@ -1,4 +1,5 @@
 import { mutation } from "./_generated/server";
+import { v } from "convex/values";
 
 export const generateUploadUrl = mutation({
   handler: async (ctx) => {
@@ -6,21 +7,35 @@ export const generateUploadUrl = mutation({
   },
 });
 
-export const AddFileEntryToDb=mutation({
+export const addFileEntrytoDb=mutation({
     args: {
         fileId:v.string(),
         storageId:v.string(),
         fileName:v.string(),
-        createBy:v.string()
+        createdBy:v.string(),
+        fileUrl:v.string(),
         },
         handler: async (ctx, args) =>{
             const result=await ctx.db.insert( 'pdfFiles',{
             fileId:args. fileId,
             fileName:args.fileName,
-            storageld: args.storageId,
-            createdBy:args.createdBy
+            storageId: args.storageId,
+            createdBy:args.createdBy,
+            fileUrl:args.fileUrl,
             })
             return 'Inserted'
         }
     
+})
+
+export const getFileUrl=mutation({
+    args: {
+        storageId:v.string()
+    },
+    
+    handler:async (ctx,args) =>{
+    const url=await ctx.storage.getUrl(args.storageId);
+    return url;
+    }
+
 })
