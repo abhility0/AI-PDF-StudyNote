@@ -15,6 +15,8 @@ import { api } from '../../../convex/_generated/api'
 import { Loader2Icon } from 'lucide-react'
 import { v4 as uuidv4 } from 'uuid'
 import { useUser } from '@clerk/nextjs';
+import axios from 'axios'
+import { useAction } from 'convex/react';
 
 
   
@@ -23,6 +25,7 @@ function UploadPdfDialog({children}) {
     const generateUploadUrl=useMutation(api.fileStorage.generateUploadUrl)
     const addFileEntry=useMutation(api.fileStorage.addFileEntrytoDb)
     const getFileUrl=useMutation(api.fileStorage.getFileUrl)
+    const embeddDởcument=useAction(api.myAction.ingest)
     const {user}=useUser();
     const [file,setFile]=useState();
     const [loading, setLoading]=useState(false)
@@ -34,7 +37,7 @@ function UploadPdfDialog({children}) {
 
     const OnUpload=async()=>{
         setLoading(true);
-        const posturl = await generateUploadUrl();
+        /*/ const posturl = await generateUploadUrl();
 
         const result = await fetch(posturl, {
             method: "POST",
@@ -52,8 +55,18 @@ function UploadPdfDialog({children}) {
                 fileUrl: fileUrl,
                 createdBy: user.primaryEmailAddress.emailAddress
                 })
-                console.log(resp)
-            setLoading (false);
+
+            console.log(resp);
+            /*/
+ 
+            const ApiResp=await axios.get('/api/pdf-loader');
+            console.log(ApiResp.data.result);
+            const embeddResult= embeddDởcument({
+                splitText:ApiResp.data.result,
+                fileId:'123'
+            });
+            console.log(embeddResult);
+            setLoading(false);
     }    
     
     return (
