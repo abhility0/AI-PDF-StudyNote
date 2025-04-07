@@ -28,6 +28,7 @@ function UploadPdfDialog({children}) {
     const embeddDởcument=useAction(api.myAction.ingest)
     const {user}=useUser();
     const [file,setFile]=useState();
+    const[open, setOpen]=useState(false);
     const [loading, setLoading]=useState(false)
     const[fileName, setFileName]=useState()
 
@@ -67,12 +68,13 @@ function UploadPdfDialog({children}) {
             });
             console.log(embeddResult);
             setLoading(false);
+            setOpen(false);
     }    
     
     return (
-        <Dialog>
+        <Dialog open={open}>
         <DialogTrigger asChild>
-            {children}
+            <Button onClick={()=>setOpen(true)} className="w-full">+ Upload PDF File</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -95,7 +97,7 @@ function UploadPdfDialog({children}) {
             <DialogClose asChild>
                 <Button type="button" variant="secondary"> Close </Button>
             </DialogClose>
-            <Button onClick={OnUpload}>
+            <Button onClick={OnUpload} disabled={loading}>
                 {loading?
                     <Loader2Icon className='animate-spin'/>: 'Upload'
                 }
