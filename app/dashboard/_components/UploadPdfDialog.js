@@ -38,7 +38,7 @@ function UploadPdfDialog({children}) {
 
     const OnUpload=async()=>{
         setLoading(true);
-        /*/ const posturl = await generateUploadUrl();
+        const posturl = await generateUploadUrl();
 
         const result = await fetch(posturl, {
             method: "POST",
@@ -58,7 +58,6 @@ function UploadPdfDialog({children}) {
                 })
 
             console.log(resp);
-            /*/
  
             const ApiResp=await axios.get('/api/pdf-loader');
             console.log(ApiResp.data.result);
